@@ -9,13 +9,15 @@ function App() {
   return (
     <div>
       <Router>
-        <Navbar user={user} setUser={user} />
+        <Navbar user={user} setUser={setUser} />
+
         <Switch>
           <Route path="/chat">
-            <ChatScreen user={user} setUser={user} />
+            <ChatScreen user={user} setUser={setUser} />
           </Route>
+
           <Route path="/">
-            <LoginScreen user={user} setUser={user} />
+            <LoginScreen user={user} setUser={setUser} />
           </Route>
         </Switch>
       </Router>
