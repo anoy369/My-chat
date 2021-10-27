@@ -7,9 +7,9 @@ export default function ChatHeads({ items, setReceiver }) {
     <div>
       <p>ChatHeads</p>
       {items.map((obj, i) => (
-        <div key={i}>
-          <div>
-            <p>{obj.email[0]}</p>
+        <div key={i} className="chat-head-item">
+          <div className="user-profile-pic-container">
+            <p className="user-profile-pic-text">{obj.email[0]}</p>
           </div>
           <p>{obj.email}</p>
         </div>
