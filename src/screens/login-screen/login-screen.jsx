@@ -98,19 +98,22 @@ export default function LoginScreen({ setUser }) {
   }, [history, setUser]);
 
   return (
-    <div>
-      <div>welcome</div>
+    <div className="login-screen-container">
+      <p className="login-title">Welcome!</p>
+
       <div>
-        <label>Email</label>
-        <input type="email" ref={email} />
+        <p>Email</p>
+        <input placeholder="your.email@example.com" ref={email} />
       </div>
 
       <div>
-        <label>Password</label>
-        <input type="password" ref={password} />
+        <p>Password</p>
+        <input type="password" placeholder="Strong passowrd" ref={password} />
       </div>
 
-      <button onClick={register}>Register</button>
+      <button onClick={register} className="register-button">
+        Register
+      </button>
       <button onClick={login}>Login</button>
     </div>
   );

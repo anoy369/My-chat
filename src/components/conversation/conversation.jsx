@@ -3,15 +3,29 @@ import { doc, getDoc, updateDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 
 import "./conversation.css";
+import {
+  FaCommentAlt,
+  FaComments,
+  FaImage,
+  FaInfoCircle,
+  FaPhone,
+  FaPlusCircle,
+  FaStickyNote,
+  FaThumbsUp,
+  FaVideo,
+} from "react-icons/fa";
 
 export default function Conversation({ receiver, user }) {
   const [conversationId, setConversationId] = useState(null);
   const [messages, setMessages] = useState([]);
 
   const currentMessage = useRef(null);
+  const chatBodyRef = useRef(null);
 
   // handle sending messages
   const sendMessage = async () => {
+    if (!currentMessage.current.value) return;
+
     const myMessage = {
       message: currentMessage.current.value,
       uid: user.uid,
@@ -63,36 +77,88 @@ export default function Conversation({ receiver, user }) {
     return unsub;
   }, [conversationId]);
 
+  //send message with enter
+  const handleEnterKeyPressDown = (e) => {
+    if ((e.code === "Enter" || e.key === "Enter") && !e.shiftKey) {
+      sendMessage();
+    }
+  };
+
+  //scroll to new chat
+  const scrollToBottomOfChat = () => {
+    if (!chatBodyRef.current) return;
+    chatBodyRef.current.style.scrollBehavior = "smooth";
+    chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+  };
+
+  //scroll after new message
+  React.useEffect(() => {
+    scrollToBottomOfChat();
+  }, [messages, chatBodyRef]);
+
   return (
     <div>
       {receiver ? (
         <div>
-          <p>Conversation with {receiver.email}</p>
-
-          {/* conversation messages */}
-          <div className="conversation-messages">
-            {messages.map((obj, i) => (
-              <div
-                key={i}
-                className="message-container"
-                style={{ justifyContent: obj.uid === user.uid && "flex-end" }}
-              >
-                <div className="message-bubble">{obj.message}</div>
+          <div className="user-conversation-header">
+            <div className="user-conv-header-container">
+              <div className="user-profile-pic-container">
+                <p className="user-profile-pic-text">{receiver.email[0]}</p>
               </div>
-            ))}
+              <p>{receiver.email}</p>
+            </div>
+
+            <div className="user-conv-header-container">
+              <FaPhone color="dodgerblue" size="2vh" />
+              <FaVideo color="dodgerblue" size="2vh" />
+              <FaInfoCircle color="dodgerblue" size="2vh" />
+            </div>
           </div>
 
-          {/* input bar */}
+          {/* Conversation messages */}
+          <div className="conversation-messages" ref={chatBodyRef}>
+            {messages.length > 0 ? (
+              messages.map((obj, i) => (
+                <div
+                  key={i}
+                  className="message-container"
+                  style={{ justifyContent: obj.uid === user.uid && "flex-end" }}
+                >
+                  <div className="message-bubble">{obj.message}</div>
+                </div>
+              ))
+            ) : (
+              <div className="no-conversation">
+                <div>
+                  <FaComments />
+                </div>
+                <p>Start a conversation with {receiver.email}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Input bar */}
           <div className="input-container">
+            <FaPlusCircle />
+            <FaImage />
+            <FaStickyNote />
             <div className="input-message">
-              <input placeholder="Hi..." ref={currentMessage} />
+              <input
+                placeholder="Hi.."
+                ref={currentMessage}
+                onKeyPress={handleEnterKeyPressDown}
+              />
             </div>
             <button onClick={sendMessage}>Send</button>
+            <FaThumbsUp />
           </div>
         </div>
       ) : (
-        <div>
-          <p>Pick someone tot chat with.</p>
+        <div className="no-conversation">
+          <div>
+            <FaCommentAlt />
+          </div>
+          <p>Pick someone to talk to.</p>
         </div>
       )}
     </div>
