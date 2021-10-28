@@ -25,7 +25,7 @@ export default function Navbar({ user, setUser }) {
     <div className="navbar-container">
       {/* Left */}
       <div className="nav-search-container">
-        <img src={""} className="navbar-logo" alt="navbar-logo" />
+        <img src={ICON} className="navbar-logo" alt="navbar-logo" />
         <div className="nav-search-container-input-bar">
           <FaSearch color="#ccc" />
           <input className="nav-search-text" placeholder="Search on Facebook" />
